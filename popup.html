@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>InsertText</title>
+	<style>
+		/* Estilos básicos para o popup */
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 1rem;
+			width: 30rem;
+			background-color: #fff;
+		}
+		h1 {
+			text-align: center;
+			margin-bottom: 0.5rem;
+		}
+		p {
+			text-align: center;
+			font-size: 0.9rem;
+			color: #555;
+			margin-bottom: 1rem;
+		}
+		nav {
+			display: flex;
+			justify-content: space-around;
+			margin-bottom: 1rem;
+			border-bottom: 1px solid #ccc;
+		}
+		nav button {
+			background: none;
+			color: #666;
+			padding: 0.8rem 1.5rem;
+			border-radius: 0;
+			font-weight: normal;
+		}
+		nav button:hover {
+			transform: none;
+			box-shadow: none;
+			background: rgba(0,123,255,0.1);
+		}
+		nav button.active {
+			color: #007BFF;
+			border-bottom: 3px solid #007BFF;
+			font-weight: 600;
+		}
+		section {
+			margin-bottom: 1rem;
+		}
+		#section-textos input[type="text"] {
+			width: 100%;
+			padding: 0.5rem;
+			box-sizing: border-box;
+			margin-bottom: 1rem;
+			border: 1px solid #ccc;
+		}
+		.text-block {
+			border: 2px solid #e0e0e0;
+			padding: 0.8rem;
+			margin-bottom: 0.8rem;
+			border-radius: 8px;
+			background: white;
+			transition: transform 0.2s, box-shadow 0.2s;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		.text-block:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+		}
+		.text-block span {
+			font-weight: 500;
+			flex-grow: 1;
+		}
+		.text-block .actions {
+			display: flex;
+			gap: 0.5rem;
+			align-items: center;
+		}
+		.text-block button {
+			padding: 0.4rem 0.8rem;
+			font-size: 0.85rem;
+			min-width: auto;
+		}
+		.hidden {
+			display: none;
+		}
+		#newBlockForm {
+			border: none;
+			padding: 1.2rem;
+			margin-top: 1.2rem;
+			background: #f8f9fa;
+			border-radius: 12px;
+			box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+		}
+		input, textarea {
+			width: 100%;
+			padding: 0.8rem;
+			margin-bottom: 0.8rem;
+			box-sizing: border-box;
+			border: 2px solid #e0e0e0;
+			border-radius: 8px;
+			font-size: 0.9rem;
+			transition: border-color 0.3s, box-shadow 0.3s;
+			outline: none;
+		}
+		input:focus, textarea:focus {
+			border-color: #007BFF;
+			box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+		}
+		button {
+			padding: 0.8rem 1.2rem;
+			border: none;
+			border-radius: 8px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			background: #007BFF;
+			color: white;
+		}
+		button:hover {
+			transform: translateY(-1px);
+			box-shadow: 0 4px 12px rgba(0,123,255,0.2);
+		}
+		.btn-inserir {
+			background: #28a745;
+		}
+		.btn-editar {
+			background: transparent;
+			padding: 0.3rem !important;
+			color: #6c757d;
+		}
+		.btn-editar:hover {
+			transform: none;
+			box-shadow: none;
+			background: rgba(108, 117, 125, 0.1);
+		}
+		.btn-editar svg {
+			width: 16px;
+			height: 16px;
+		}
+		#btn-excluir-bloco {
+			background: #dc3545;
+		}
+		#btn-excluir-bloco:hover {
+			background: #c82333;
+		}
+		#search {
+			background: white url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%23999" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>') no-repeat 95% center;
+			padding-right: 2.5rem;
+		}
+		#section-import-export div {
+			background: white;
+			padding: 1.2rem;
+			border-radius: 12px;
+			margin-bottom: 1.5rem;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+		}
+		/* Melhorar o visual do input file */
+		input[type="file"] {
+			border: 2px dashed #ccc;
+			padding: 1.5rem;
+			text-align: center;
+			background: #f8f9fa;
+		}
+		input[type="file"]:hover {
+			border-color: #007BFF;
+			background: rgba(0,123,255,0.05);
+		}
+		.edit-form {
+			margin: 0;
+			padding: 0.8rem;
+			background: #f8f9fa;
+			border-radius: 8px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+		}
+		footer {
+			padding: 1rem 0;
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<h1>InsertText</h1>
+	<p>Crie blocos de textos e insere-os em qualquer site, facilitando a reutilização de textos de forma prática.</p>
+
+	<nav>
+		<button id="tab-textos" class="active">Textos</button>
+		<button id="tab-manual">Manual</button>
+		<button id="tab-import-export">Importar/Exportar</button>
+	</nav>
+
+	<!-- Seção Textos -->
+	<section id="section-textos">
+		<input type="text" id="search" placeholder="Buscar textos...">
+		<div id="textos-list">
+			<!-- Lista de blocos de textos salvos será renderizada aqui -->
+		</div>
+		
+		<!-- Movido para dentro da seção textos -->
+		<section id="new-block-section">
+			<button id="btn-novo-bloco">Inserir Novo Bloco</button>
+			<div id="newBlockForm" class="hidden">
+				<input type="text" id="novo-titulo" placeholder="Título">
+				<textarea id="novo-texto" rows="4" placeholder="Texto"></textarea>
+				<input type="text" id="novo-tags" placeholder="Tags (separadas por vírgula)">
+				<div style="display: flex; justify-content: space-between;">
+					<button id="btn-salvar-bloco">Salvar Bloco</button>
+					<button id="btn-excluir-bloco" class="hidden" style="background-color: #ff4444; color: white;">Excluir Bloco</button>
+				</div>
+			</div>
+		</section>
+	</section>
+
+	<!-- Seção Manual -->
+	<section id="section-manual" class="hidden">
+		<textarea id="manual-text" rows="5" placeholder="Insira o texto para inserir no site"></textarea>
+		<button id="btn-inserir-manual">Inserir Texto</button>
+	</section>
+
+	<!-- Seção Importar/Exportar -->
+	<section id="section-import-export" class="hidden">
+		<div>
+			<p>Exportar: Salva todos os seus blocos de texto em um arquivo JSON</p>
+			<button id="btn-exportar">Exportar Textos</button>
+		</div>
+		<div>
+			<p>Importar: Carrega blocos de texto a partir de um arquivo JSON exportado anteriormente</p>
+			<input type="file" id="importar-arquivo" accept="application/json">
+			<button id="btn-importar">Importar Textos</button>
+		</div>
+	</section>
+
+	<footer>
+		<p>A InsertText é uma extensão prática, projetada para armazenar, gerenciar e reutilizar textos. Ideal para configurar scripts de atendimento no WhatsApp Web, conteúdos educacionais e outras aplicações, mesmo em sites com restrições de colagem.</p>
+		<p>Licença MIT - <a href="https://github.com/gmasson/inserttext" target="_blank">Colabore no Github</a></p>
+	</footer>
+
+	<script src="scripts.js"></script>
+</body>
+</html>
